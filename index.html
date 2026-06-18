@@ -61,6 +61,10 @@
       display: none;
     }
 
+    audio {
+      width: 100%;
+      margin-top: 15px;
+    }
   </style>
 </head>
 
@@ -82,7 +86,11 @@
   <div class="page hidden" id="music">
     <h2>▶️ MUSIC</h2>
     <p>Workout motivation mix</p>
-    <button onclick="openExternal('music')">PLAY MUSIC</button>
+
+    <audio id="audio" controls></audio>
+
+    <button onclick="playMusic()">▶️ PLAY MUSIC</button>
+    <button onclick="nextTrack()">⏭ NEXT TRACK</button>
     <button onclick="back()">⬅️ BACK</button>
   </div>
 
@@ -120,6 +128,7 @@
   </div>
 
   <script>
+    // NAVIGAZIONE
     function openPage(page) {
       document.getElementById("home").style.display = "none";
       document.getElementById(page).classList.remove("hidden");
@@ -130,9 +139,30 @@
       document.getElementById("home").style.display = "block";
     }
 
+    // AUDIO PLAYER (MP3 LOCALI)
+    const audio = document.getElementById("audio");
+
+    const tracks = [
+      "music/track1.mp3",
+      "music/track2.mp3",
+      "music/track3.mp3"
+    ];
+
+    let current = 0;
+
+    function playMusic() {
+      audio.src = tracks[current];
+      audio.play();
+    }
+
+    function nextTrack() {
+      current = (current + 1) % tracks.length;
+      playMusic();
+    }
+
+    // LINK ESTERNI
     function openExternal(type) {
       const links = {
-        music: "https://www.youtube.com/results?search_query=gym+motivation+mix",
         progress: "https://docs.google.com/spreadsheets",
         call: "tel:+393331234567"
       };
