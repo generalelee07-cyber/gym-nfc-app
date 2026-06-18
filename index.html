@@ -6,9 +6,7 @@
   <title>GYM NFC APP</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -27,9 +25,7 @@
       text-align: center;
     }
 
-    h1 {
-      margin-bottom: 5px;
-    }
+    h1 { margin-bottom: 5px; }
 
     .sub {
       opacity: 0.6;
@@ -57,9 +53,7 @@
       text-align: center;
     }
 
-    .hidden {
-      display: none;
-    }
+    .hidden { display: none; }
 
     audio {
       width: 100%;
@@ -85,12 +79,12 @@
   <!-- MUSIC -->
   <div class="page hidden" id="music">
     <h2>▶️ MUSIC</h2>
-    <p>Workout motivation mix</p>
+    <p>Workout mix</p>
 
     <audio id="audio" controls></audio>
 
-    <button onclick="playMusic()">▶️ PLAY MUSIC</button>
-    <button onclick="nextTrack()">⏭ NEXT TRACK</button>
+    <button onclick="playMusic()">▶️ PLAY</button>
+    <button onclick="nextTrack()">⏭ NEXT</button>
     <button onclick="back()">⬅️ BACK</button>
   </div>
 
@@ -106,7 +100,6 @@
   <!-- PROGRESS -->
   <div class="page hidden" id="progress">
     <h2>📈 PROGRESS</h2>
-    <p>Track su Google Sheets</p>
     <button onclick="openExternal('progress')">OPEN SHEET</button>
     <button onclick="back()">⬅️ BACK</button>
   </div>
@@ -122,13 +115,12 @@
 
   <!-- CONTACTS -->
   <div class="page hidden" id="contacts">
-    <h2>📞 CONTACTS EMERGENCY</h2>
+    <h2>📞 CONTACTS</h2>
     <button onclick="openExternal('call')">CALL ICE</button>
     <button onclick="back()">⬅️ BACK</button>
   </div>
 
   <script>
-    // NAVIGAZIONE
     function openPage(page) {
       document.getElementById("home").style.display = "none";
       document.getElementById(page).classList.remove("hidden");
@@ -139,19 +131,18 @@
       document.getElementById("home").style.display = "block";
     }
 
-    // AUDIO PLAYER (MP3 LOCALI)
+    // AUDIO
     const audio = document.getElementById("audio");
 
     const tracks = [
-      "music/track1.mp3",
-      "music/track2.mp3",
-      "music/track3.mp3"
+      "music/track1.mp3"
     ];
 
     let current = 0;
 
     function playMusic() {
       audio.src = tracks[current];
+      audio.load();
       audio.play();
     }
 
@@ -160,7 +151,7 @@
       playMusic();
     }
 
-    // LINK ESTERNI
+    // EXTERNAL
     function openExternal(type) {
       const links = {
         progress: "https://docs.google.com/spreadsheets",
