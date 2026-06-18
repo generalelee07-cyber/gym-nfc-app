@@ -6,7 +6,9 @@
   <title>GYM NFC APP</title>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -25,7 +27,9 @@
       text-align: center;
     }
 
-    h1 { margin-bottom: 5px; }
+    h1 {
+      margin-bottom: 5px;
+    }
 
     .sub {
       opacity: 0.6;
@@ -53,7 +57,9 @@
       text-align: center;
     }
 
-    .hidden { display: none; }
+    .hidden {
+      display: none;
+    }
 
     audio {
       width: 100%;
@@ -79,12 +85,12 @@
   <!-- MUSIC -->
   <div class="page hidden" id="music">
     <h2>▶️ MUSIC</h2>
-    <p>Workout mix</p>
+    <p>Workout motivation mix</p>
 
     <audio id="audio" controls></audio>
 
-    <button onclick="playMusic()">▶️ PLAY</button>
-    <button onclick="nextTrack()">⏭ NEXT</button>
+    <button onclick="playMusic()">▶️ PLAY MUSIC</button>
+    <button onclick="nextTrack()">⏭ NEXT TRACK</button>
     <button onclick="back()">⬅️ BACK</button>
   </div>
 
@@ -100,6 +106,7 @@
   <!-- PROGRESS -->
   <div class="page hidden" id="progress">
     <h2>📈 PROGRESS</h2>
+    <p>Track su Google Sheets</p>
     <button onclick="openExternal('progress')">OPEN SHEET</button>
     <button onclick="back()">⬅️ BACK</button>
   </div>
@@ -115,12 +122,13 @@
 
   <!-- CONTACTS -->
   <div class="page hidden" id="contacts">
-    <h2>📞 CONTACTS</h2>
+    <h2>📞 CONTACTS EMERGENCY</h2>
     <button onclick="openExternal('call')">CALL ICE</button>
     <button onclick="back()">⬅️ BACK</button>
   </div>
 
   <script>
+    // NAVIGAZIONE
     function openPage(page) {
       document.getElementById("home").style.display = "none";
       document.getElementById(page).classList.remove("hidden");
@@ -131,149 +139,19 @@
       document.getElementById("home").style.display = "block";
     }
 
-    // AUDIO
+    // AUDIO PLAYER (MP3 LOCALI)
     const audio = document.getElementById("audio");
 
     const tracks = [
-      "<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GYM NFC APP</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, #0a0f1f, #111827);
-      color: white;
-    }
-
-    .app {
-      padding: 20px;
-      text-align: center;
-    }
-
-    h1 {
-      margin-bottom: 10px;
-    }
-
-    button {
-      width: 100%;
-      padding: 16px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 12px;
-      background: #2563eb;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    button:active {
-      transform: scale(0.97);
-    }
-
-    .page {
-      display: none;
-      padding: 20px;
-    }
-
-    .active {
-      display: block;
-    }
-
-    audio {
-      width: 100%;
-      margin-top: 15px;
-    }
-  </style>
-</head>
-
-<body>
-
-<!-- HOME -->
-<div class="app page active" id="home">
-  <h1>🏋️ GYM HUB</h1>
-
-  <button onclick="openPage('music')">▶️ MUSIC</button>
-  <button onclick="openPage('workout')">💪 WORKOUT</button>
-  <button onclick="openPage('progress')">📈 PROGRESS</button>
-  <button onclick="openPage('emergency')">🆘 EMERGENCY</button>
-</div>
-
-<!-- MUSIC -->
-<div class="page" id="music">
-  <h2>🎵 MUSIC</h2>
-
-  <audio id="audio" controls></audio>
-
-  <button onclick="playMusic()">▶️ PLAY MUSIC</button>
-  <button onclick="back()">⬅️ BACK</button>
-</div>
-
-<!-- WORKOUT -->
-<div class="page" id="workout">
-  <h2>💪 WORKOUT</h2>
-  <p>Chest / Back / Legs</p>
-  <button onclick="back()">⬅️ BACK</button>
-</div>
-
-<!-- PROGRESS -->
-<div class="page" id="progress">
-  <h2>📈 PROGRESS</h2>
-  <button onclick="back()">⬅️ BACK</button>
-</div>
-
-<!-- EMERGENCY -->
-<div class="page" id="emergency">
-  <h2>🆘 EMERGENCY</h2>
-  <p>ICE numeri salvati</p>
-  <button onclick="back()">⬅️ BACK</button>
-</div>
-
-<script>
-function openPage(id) {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-
-function back() {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById("home").classList.add("active");
-}
-
-// 🎵 AUDIO
-const audio = document.getElementById("audio");
-
-const tracks = [
-  "chitarra_acustica.mp3"
-];
-
-function playMusic() {
-  audio.src = tracks[0];
-  audio.load();
-  audio.play().catch(err => {
-    console.log("Errore audio:", err);
-    alert("Audio non trovato o bloccato dal browser");
-  });
-}
-</script>
-
-</body>
-</html>"
+      "music/track1.mp3",
+      "music/track2.mp3",
+      "music/track3.mp3"
     ];
 
     let current = 0;
 
     function playMusic() {
       audio.src = tracks[current];
-      audio.load();
       audio.play();
     }
 
@@ -282,7 +160,7 @@ function playMusic() {
       playMusic();
     }
 
-    // EXTERNAL
+    // LINK ESTERNI
     function openExternal(type) {
       const links = {
         progress: "https://docs.google.com/spreadsheets",
