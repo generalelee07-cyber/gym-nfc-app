@@ -1,50 +1,145 @@
 <!DOCTYPE html>
+<html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GYM NFC APP</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #0a0f1f, #111827);
+      color: white;
+    }
+
+    .app {
+      width: 100vw;
+      min-height: 100vh;
+      padding: 25px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 5px;
+    }
+
+    .sub {
+      opacity: 0.6;
+      margin-bottom: 25px;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 12px;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .page {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+  </style>
 </head>
-<head>
-  <meta charset="UTF-8">
-  <title>GYM NFC APP</title>
-</head>
-body {
-  margin: 0;
- .app {
-  width: 100vw;
-  height: 100vh;
-  padding: 25px;
-  text-align: center;
-  box-sizing: border-box;
-}
-  font-family: Arial, sans-serif;
-  background: linear-gradient(180deg, #0a0f1f, #111827);
-  color: white;
-} color:white; text-align:center;">
 
-  <h1>🏋️ GYM HUB</h1>
+<body>
 
-  <button onclick="window.location.href='https://www.youtube.com/results?search_query=gym+music'">
-    ▶️ START MUSIC
-  </button>
+  <!-- HOME -->
+  <div class="app" id="home">
+    <h1>🏋️ GYM HUB</h1>
+    <p class="sub">NFC Fitness System</p>
 
-  <br><br>
+    <button onclick="openPage('music')">▶️ START MUSIC</button>
+    <button onclick="openPage('workout')">💪 WORKOUT</button>
+    <button onclick="openPage('progress')">📈 PROGRESS</button>
+    <button onclick="openPage('emergency')">🆘 EMERGENCY</button>
+    <button onclick="openPage('contacts')">📞 CONTACTS</button>
+  </div>
 
-  <button onclick="alert('Workout section')">
-    💪 WORKOUT
-  </button>
+  <!-- MUSIC -->
+  <div class="page hidden" id="music">
+    <h2>▶️ MUSIC</h2>
+    <p>Workout motivation mix</p>
+    <button onclick="openExternal('music')">PLAY MUSIC</button>
+    <button onclick="back()">⬅️ BACK</button>
+  </div>
 
-  <br><br>
+  <!-- WORKOUT -->
+  <div class="page hidden" id="workout">
+    <h2>💪 WORKOUT</h2>
+    <p>A: Chest / Triceps</p>
+    <p>B: Back / Biceps</p>
+    <p>C: Legs / Abs</p>
+    <button onclick="back()">⬅️ BACK</button>
+  </div>
 
-  <button onclick="alert('Progress section')">
-    📈 PROGRESS
-  </button>
+  <!-- PROGRESS -->
+  <div class="page hidden" id="progress">
+    <h2>📈 PROGRESS</h2>
+    <p>Track su Google Sheets</p>
+    <button onclick="openExternal('progress')">OPEN SHEET</button>
+    <button onclick="back()">⬅️ BACK</button>
+  </div>
 
-  <br><br>
+  <!-- EMERGENCY -->
+  <div class="page hidden" id="emergency">
+    <h2>🆘 EMERGENCY</h2>
+    <p><b>ICE 1:</b> +39 333 1234567</p>
+    <p><b>ICE 2:</b> +39 347 9876543</p>
+    <p><b>Blood:</b> O+</p>
+    <button onclick="back()">⬅️ BACK</button>
+  </div>
 
-  <button onclick="alert('Emergency info')">
-    🆘 EMERGENCY
-  </button>
+  <!-- CONTACTS -->
+  <div class="page hidden" id="contacts">
+    <h2>📞 CONTACTS EMERGENCY</h2>
+    <button onclick="openExternal('call')">CALL ICE</button>
+    <button onclick="back()">⬅️ BACK</button>
+  </div>
+
+  <script>
+    function openPage(page) {
+      document.getElementById("home").style.display = "none";
+      document.getElementById(page).classList.remove("hidden");
+    }
+
+    function back() {
+      document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+      document.getElementById("home").style.display = "block";
+    }
+
+    function openExternal(type) {
+      const links = {
+        music: "https://www.youtube.com/results?search_query=gym+motivation+mix",
+        progress: "https://docs.google.com/spreadsheets",
+        call: "tel:+393331234567"
+      };
+
+      window.open(links[type], "_blank");
+    }
+  </script>
 
 </body>
 </html>
