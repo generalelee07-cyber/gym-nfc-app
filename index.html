@@ -13,35 +13,41 @@
       font-family: Arial, sans-serif;
       background: linear-gradient(180deg, #0a0f1f, #111827);
       color: white;
-    }
-
-    .app {
-      padding: 20px;
-      text-align: center;
-    }
-
-    button {
-      width: 100%;
-      padding: 16px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 12px;
-      background: #2563eb;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
+      padding-bottom: 120px; /* spazio per player */
     }
 
     .page {
       display: none;
       padding: 20px;
+      text-align: center;
     }
 
     .active {
       display: block;
     }
 
-    /* PLAYER FISSO SEMPRE ATTIVO */
+    /* NAV BAR SEMPRE VISIBILE */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      background: #111827;
+      padding: 10px 0;
+      border-bottom: 1px solid #333;
+    }
+
+    .nav button {
+      background: none;
+      border: none;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    /* PLAYER */
     .player {
       position: fixed;
       bottom: 0;
@@ -53,9 +59,7 @@
       text-align: center;
     }
 
-    audio {
-      width: 100%;
-    }
+    audio { width: 100%; }
 
     .song-title {
       font-size: 14px;
@@ -67,14 +71,17 @@
 
 <body>
 
-<!-- HOME -->
-<div class="app page active" id="home">
-  <h1>🏋️ GYM HUB</h1>
+<!-- NAV SEMPRE VISIBILE -->
+<div class="nav">
+  <button onclick="openPage('home')">HOME</button>
+  <button onclick="openPage('music')">MUSIC</button>
+  <button onclick="openPage('workout')">WORKOUT</button>
+  <button onclick="openPage('progress')">PROGRESS</button>
+</div>
 
-  <button onclick="openPage('music')">🎧 MUSIC</button>
-  <button onclick="openPage('workout')">💪 WORKOUT</button>
-  <button onclick="openPage('progress')">📈 PROGRESS</button>
-  <button onclick="openPage('emergency')">🆘 EMERGENCY</button>
+<!-- HOME -->
+<div class="page active" id="home">
+  <h2>🏋️ HOME</h2>
 </div>
 
 <!-- MUSIC -->
@@ -82,13 +89,14 @@
   <h2>🎧 MUSIC</h2>
 
   <button onclick="playMusic()">▶️ PLAY</button>
-  <button onclick="togglePlay()">⏯ PAUSE/RESUME</button>
+  <button onclick="togglePlay()">⏯ PLAY/PAUSE</button>
+  <button onclick="nextTrack()">⏭ NEXT</button>
+  <button onclick="toggleLoop()">🔁 LOOP</button>
 </div>
 
 <!-- WORKOUT -->
 <div class="page" id="workout">
   <h2>💪 WORKOUT</h2>
-  <p>Chest / Back / Legs</p>
 </div>
 
 <!-- PROGRESS -->
@@ -96,60 +104,70 @@
   <h2>📈 PROGRESS</h2>
 </div>
 
-<!-- EMERGENCY -->
-<div class="page" id="emergency">
-  <h2>🆘 EMERGENCY</h2>
-</div>
-
-<!-- PLAYER SEMPRE ATTIVO -->
+<!-- PLAYER -->
 <div class="player">
-  <div class="song-title" id="songTitle">Nessuna musica in riproduzione</div>
+  <div class="song-title" id="songTitle">Nessuna musica</div>
   <audio id="audio" controls></audio>
 </div>
 
 <script>
 
-// NAVIGAZIONE (NON TOCCA AUDIO)
+// NAVIGAZIONE FIXATA
 function openPage(id) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-// AUDIO PLAYER GLOBALE
+// AUDIO
 const audio = document.getElementById("audio");
 const title = document.getElementById("songTitle");
 
-const track = {
-  name: "Acoustic Guitar Loop",
-  url: "https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/acoustic_guitar.mp3"
-};
-
-let loaded = false;
-
-// CARICA E RIPRODUCI (UNA SOLA VOLTA)
-function playMusic() {
-  if (!loaded) {
-    audio.src = track.url;
-    title.innerText = "🎧 " + track.name;
-    audio.load();
-    loaded = true;
+const tracks = [
+  {
+    name: "Acoustic Guitar",
+    url: "https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/acoustic_guitar.mp3"
+  },
+  {
+    name: "Beat Energy",
+    url: "https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/beat1.mp3"
   }
-  audio.play().catch(err => console.log(err));
+];
+
+let current = 0;
+let loopEnabled = true;
+
+function loadTrack(i) {
+  current = i;
+  audio.src = tracks[current].url;
+  title.innerText = "🎧 " + tracks[current].name;
+  audio.load();
+  audio.play().catch(()=>{});
 }
 
-// PAUSA / RIPRENDI
+function playMusic() {
+  loadTrack(current);
+}
+
 function togglePlay() {
-  if (audio.paused) {
+  if (audio.paused) audio.play();
+  else audio.pause();
+}
+
+function nextTrack() {
+  loadTrack((current + 1) % tracks.length);
+}
+
+function toggleLoop() {
+  loopEnabled = !loopEnabled;
+}
+
+audio.addEventListener("ended", () => {
+  if (loopEnabled) {
+    audio.currentTime = 0;
     audio.play();
   } else {
-    audio.pause();
+    nextTrack();
   }
-}
-
-// 🔁 LOOP INFINITO DELLA STESSA CANZONE
-audio.addEventListener("ended", () => {
-  audio.currentTime = 0;
-  audio.play();
 });
 
 </script>
