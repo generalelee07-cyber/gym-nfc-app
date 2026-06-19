@@ -13,13 +13,49 @@ body {
   font-family: Arial, sans-serif;
   background: linear-gradient(180deg, #0a0f1f, #111827);
   color: white;
+
+  /* 🔥 FIX IMPORTANTE: spazio per navbar + player */
+  padding-top: 65px;
   padding-bottom: 120px;
 }
 
-/* HOME STYLE */
-.home {
-  padding: 25px;
+/* NAVBAR */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background: #111827;
+  padding: 10px 0;
+  border-bottom: 1px solid #333;
+  z-index: 10;
+}
+
+.nav button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* PAGES */
+.page {
+  display: none;
+  padding: 20px;
   text-align: center;
+}
+
+.active {
+  display: block;
+}
+
+/* HOME */
+.home {
+  text-align: center;
+  padding: 25px;
 }
 
 h1 {
@@ -48,17 +84,6 @@ button:active {
   transform: scale(0.97);
 }
 
-/* PAGES */
-.page {
-  display: none;
-  padding: 20px;
-  text-align: center;
-}
-
-.active {
-  display: block;
-}
-
 /* PLAYER */
 .player {
   position: fixed;
@@ -79,26 +104,6 @@ audio {
   font-size: 14px;
   margin-bottom: 5px;
   opacity: 0.8;
-}
-
-/* NAV BAR */
-.nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  background: #111827;
-  padding: 10px 0;
-  border-bottom: 1px solid #333;
-}
-
-.nav button {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 12px;
 }
 </style>
 </head>
@@ -154,6 +159,7 @@ audio {
 
 <script>
 
+// NAV
 function openPage(id) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
