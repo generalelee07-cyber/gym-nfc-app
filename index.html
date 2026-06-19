@@ -1,41 +1,134 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GYM NFC APP</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #0a0f1f, #111827);
+      color: white;
+    }
+
+    .app {
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 12px;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .page {
+      display: none;
+      padding: 20px;
+    }
+
+    .active {
+      display: block;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- HOME -->
+<div class="app page active" id="home">
+  <h1>🏋️ GYM HUB</h1>
+
+  <button onclick="openPage('music')">▶️ MUSIC</button>
+  <button onclick="openPage('workout')">💪 WORKOUT</button>
+  <button onclick="openPage('progress')">📈 PROGRESS</button>
+  <button onclick="openPage('emergency')">🆘 EMERGENCY</button>
+</div>
+
+<!-- MUSIC -->
+<div class="page" id="music">
+  <h2>🎵 MUSIC</h2>
+
+  <audio id="audio" controls></audio>
+
+  <button onclick="playMusic()">▶️ PLAY MUSIC</button>
+  <button onclick="back()">⬅️ BACK</button>
+</div>
+
+<!-- WORKOUT -->
+<div class="page" id="workout">
+  <h2>💪 WORKOUT</h2>
+  <p>Chest / Back / Legs</p>
+  <button onclick="back()">⬅️ BACK</button>
+</div>
+
+<!-- PROGRESS -->
+<div class="page" id="progress">
+  <h2>📈 PROGRESS</h2>
+  <button onclick="back()">⬅️ BACK</button>
+</div>
+
+<!-- EMERGENCY -->
+<div class="page" id="emergency">
+  <h2>🆘 EMERGENCY</h2>
+  <p>ICE numeri salvati</p>
+  <button onclick="back()">⬅️ BACK</button>
+</div>
+
+<script>
+
 // NAVIGAZIONE
-function openPage(page) {
-  document.getElementById("home").style.display = "none";
-  document.getElementById(page).classList.remove("hidden");
+function openPage(id) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 }
 
 function back() {
-  document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
-  document.getElementById("home").style.display = "block";
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById("home").classList.add("active");
 }
 
-// AUDIO PLAYER (GITHUB RAW)
+// AUDIO PLAYER (CORRETTO GITHUB RAW)
 const audio = document.getElementById("audio");
 
 const tracks = [
-  "https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/acoustic_guitar.mp3",
+  "https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/acoustic_guitar.mp3"
 ];
 
-let current = 0;
-
 function playMusic() {
-  audio.src = tracks[current];
+  audio.src = tracks[0];
+  audio.load();
   audio.play().catch(err => {
-    console.log("Audio non avviato:", err);
+    console.log("Errore audio:", err);
   });
 }
 
-function nextTrack() {
-  current = (current + 1) % tracks.length;
-  playMusic();
-}
+</script>
 
-// LINK ESTERNI
-function openExternal(type) {
-  const links = {
-    progress: "https://docs.google.com/spreadsheets",
-    call: "tel:+393331234567"
-  };
-
-  window.open(links[type], "_blank");
-}
+</body>
+</html>
