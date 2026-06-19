@@ -132,7 +132,7 @@ audio { width: 100%; }
     <button onclick="setPlaylist('cardio')">🏃 CARDIO</button>
     <button onclick="setPlaylist('recovery')">🧘 RECOVERY</button>
 
-    <button class="back" onclick="goBack()">⬅️ BACK</button>
+    <button class="back" onclick="openPage('home')">⬅️ BACK</button>
   </div>
 </div>
 
@@ -145,7 +145,7 @@ audio { width: 100%; }
     <button onclick="nextTrack()">⏭ NEXT</button>
     <button onclick="toggleLoop()">🔁 LOOP</button>
 
-    <button class="back" onclick="goBack()">⬅️ BACK</button>
+    <button class="back" onclick="openPage('home')">⬅️ BACK</button>
   </div>
 </div>
 
@@ -160,7 +160,7 @@ audio { width: 100%; }
     <button class="emergency" onclick="callICE1()">📞 CALL ICE 1</button>
     <button class="emergency" onclick="callICE2()">📞 CALL ICE 2</button>
 
-    <button class="back" onclick="goBack()">⬅️ BACK</button>
+    <button class="back" onclick="openPage('home')">⬅️ BACK</button>
   </div>
 </div>
 
@@ -176,11 +176,6 @@ audio { width: 100%; }
 function openPage(id){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
-}
-
-/* BACK */
-function goBack(){
-  openPage("home");
 }
 
 /* EMERGENCY */
@@ -212,15 +207,13 @@ let currentPlaylist = playlists.power;
 let current = 0;
 let loopEnabled = true;
 
-/* SET PLAYLIST (NO AUTO PLAY) */
+/* 🔥 SOLO SELEZIONE (NON CAMBIA PAGINA) */
 function setPlaylist(type){
   currentPlaylist = playlists[type];
   current = 0;
-  loadTrack();
-  openPage("music");
 }
 
-/* LOAD TRACK */
+/* LOAD */
 function loadTrack(){
   const t = currentPlaylist[current];
   audio.src = t.url;
@@ -230,6 +223,7 @@ function loadTrack(){
 /* PLAY / PAUSE */
 function togglePlay(){
   if(audio.paused){
+    loadTrack();
     audio.play();
   } else {
     audio.pause();
