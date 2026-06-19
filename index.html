@@ -17,6 +17,7 @@ body {
   padding-bottom: 120px;
 }
 
+/* NAV */
 .nav {
   position: fixed;
   top: 0;
@@ -36,6 +37,7 @@ body {
   font-weight: bold;
 }
 
+/* PAGES */
 .page {
   display: none;
   padding: 20px;
@@ -44,6 +46,7 @@ body {
 
 .active { display: block; }
 
+/* CARD */
 .card {
   background: rgba(255,255,255,0.06);
   border-radius: 16px;
@@ -52,6 +55,7 @@ body {
   margin-top: 20px;
 }
 
+/* BUTTON */
 button {
   width: 100%;
   padding: 16px;
@@ -65,9 +69,19 @@ button {
 }
 
 .emergency { background: #dc2626 !important; }
-
 .back { background: #374151 !important; }
 
+/* LOGO */
+.logo {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin: 15px auto;
+  display: block;
+  border-radius: 20px;
+}
+
+/* PLAYER */
 .player {
   position: fixed;
   bottom: 0;
@@ -100,6 +114,8 @@ audio { width: 100%; }
 <div class="page active" id="home">
   <div class="card">
     <h1>🏋️ GYM HUB SPOTIFY</h1>
+
+    <img class="logo" src="https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/HAPPY%20FITNESS.png">
 
     <button onclick="openPage('workout')">💪 START WORKOUT</button>
     <button onclick="openPage('music')">🎧 MUSIC</button>
@@ -168,8 +184,13 @@ function goBack(){
 }
 
 /* EMERGENCY */
-function callICE1(){ window.location.href="tel:+393491972057"; }
-function callICE2(){ window.location.href="tel:+393479876543"; }
+function callICE1(){
+  window.location.href="tel:+393491972057";
+}
+
+function callICE2(){
+  window.location.href="tel:+393479876543";
+}
 
 /* AUDIO */
 const audio = document.getElementById("audio");
@@ -191,7 +212,7 @@ let currentPlaylist = playlists.power;
 let current = 0;
 let loopEnabled = true;
 
-/* 🔥 SOLO SET PLAYLIST (NON AVVIA AUDIO) */
+/* SET PLAYLIST (NO AUTO PLAY) */
 function setPlaylist(type){
   currentPlaylist = playlists[type];
   current = 0;
@@ -199,7 +220,7 @@ function setPlaylist(type){
   openPage("music");
 }
 
-/* LOAD */
+/* LOAD TRACK */
 function loadTrack(){
   const t = currentPlaylist[current];
   audio.src = t.url;
