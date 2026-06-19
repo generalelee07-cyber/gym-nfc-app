@@ -100,8 +100,9 @@ button {
 
 /* TIMER */
 .timer {
-  font-size: 28px;
+  font-size: 36px;
   margin: 10px 0;
+  font-weight: bold;
 }
 
 /* PLAYER */
@@ -159,18 +160,15 @@ audio { width: 100%; }
   </div>
 </div>
 
-<!-- 🔥 POWER PAGE -->
+<!-- POWER PAGE -->
 <div class="page" id="powerPage">
   <div class="card">
-    <h2>🔥 POWER MODE</h2>
+    <h2>🔥 POWER HIIT MODE</h2>
 
-    <!-- TIMER -->
-    <div class="timer" id="timer">00:00</div>
+    <div class="timer" id="timer">READY</div>
 
-    <button onclick="startTimer()">▶️ START TIMER</button>
-    <button onclick="stopTimer()">⏹ STOP TIMER</button>
-
-    <button onclick="startWorkoutFlow()">⚡ START WORKOUT FLOW</button>
+    <button onclick="startHIIT()">▶️ START HIIT</button>
+    <button onclick="stopHIIT()">⏹ STOP</button>
 
     <div class="exercise-box">
       <h3>💪 EXERCISES</h3>
@@ -180,6 +178,7 @@ audio { width: 100%; }
       <button class="ex" onclick="toggleEx(this)">💀 Deadlift</button>
       <button class="ex" onclick="toggleEx(this)">💪 Shoulder Press</button>
       <button class="ex" onclick="toggleEx(this)">🧲 Pull Ups</button>
+
     </div>
 
     <button class="back" onclick="openPage('workout')">⬅️ BACK</button>
@@ -214,11 +213,8 @@ audio { width: 100%; }
   </div>
 </div>
 
-<!-- PLAYER -->
-<div class="player">
-  <div id="songTitle" class="song-title">Nessuna musica</div>
-  <audio id="audio" controls></audio>
-</div>
+<!-- AUDIO -->
+<audio id="audio" controls></audio>
 
 <script>
 
@@ -233,46 +229,14 @@ function toggleEx(btn){
   btn.classList.toggle("active");
 }
 
-/* TIMER */
-let timer;
-let seconds = 0;
-
-function startTimer(){
-  timer = setInterval(()=>{
-    seconds++;
-    let min = String(Math.floor(seconds/60)).padStart(2,'0');
-    let sec = String(seconds%60).padStart(2,'0');
-    document.getElementById("timer").innerText = `${min}:${sec}`;
-  },1000);
-}
-
-function stopTimer(){
-  clearInterval(timer);
-}
-
-/* WORKOUT FLOW */
-function startWorkoutFlow(){
-  openPage("music");
-  togglePlay();
-}
-
 /* EMERGENCY */
-function callICE1(){
-  window.location.href="tel:+393491972057";
-}
-
-function callICE2(){
-  window.location.href="tel:+393479876543";
-}
+function callICE1(){ window.location.href="tel:+393491972057"; }
+function callICE2(){ window.location.href="tel:+393479876543"; }
 
 /* AUDIO */
 const audio = document.getElementById("audio");
-const title = document.getElementById("songTitle");
 
 const playlists = {
-  power: [
-    {name:"Power Beat", url:"https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/beat1.mp3"}
-  ],
   cardio: [
     {name:"Cardio Run", url:"https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/motivation2.mp3"}
   ],
@@ -281,7 +245,7 @@ const playlists = {
   ]
 };
 
-let currentPlaylist = playlists.power;
+let currentPlaylist = playlists.cardio;
 let current = 0;
 let loopEnabled = true;
 
@@ -293,9 +257,9 @@ function setPlaylist(type){
 function loadTrack(){
   const t = currentPlaylist[current];
   audio.src = t.url;
-  title.innerText = "🎧 " + t.name;
 }
 
+/* PLAY */
 function togglePlay(){
   if(audio.paused){
     loadTrack();
@@ -311,6 +275,7 @@ function nextTrack(){
   audio.play();
 }
 
+/* LOOP */
 function toggleLoop(){
   loopEnabled = !loopEnabled;
 }
@@ -320,6 +285,50 @@ audio.addEventListener("ended", ()=>{
     nextTrack();
   }
 });
+
+/* 🔥 HIIT TIMER */
+let hiitInterval;
+let round = 0;
+let phase = "work"; // work / rest
+
+function beep(){
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const osc = ctx.createOscillator();
+  osc.connect(ctx.destination);
+  osc.frequency.value = 800;
+  osc.start();
+  setTimeout(()=>osc.stop(), 150);
+}
+
+function startHIIT(){
+  clearInterval(hiitInterval);
+  round = 30;
+  phase = "work";
+
+  hiitInterval = setInterval(()=>{
+    document.getElementById("timer").innerText = phase.toUpperCase() + " " + round;
+
+    round--;
+
+    if(round < 0){
+      beep();
+
+      if(phase === "work"){
+        phase = "rest";
+        round = 15;
+      } else {
+        phase = "work";
+        round = 30;
+      }
+    }
+
+  },1000);
+}
+
+function stopHIIT(){
+  clearInterval(hiitInterval);
+  document.getElementById("timer").innerText = "STOPPED";
+}
 
 </script>
 
