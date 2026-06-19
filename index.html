@@ -37,67 +37,59 @@ body {
   font-weight: bold;
 }
 
-/* PAGES */
-.page {
-  display: none;
-  padding: 20px;
-  text-align: center;
-}
-
-.active { display: block; }
+/* PAGE */
+.page { display:none; padding:20px; text-align:center; }
+.active { display:block; }
 
 /* CARD */
 .card {
   background: rgba(255,255,255,0.06);
-  border-radius: 16px;
-  padding: 20px;
-  border: 1px solid rgba(255,255,255,0.1);
-  margin-top: 20px;
+  padding:20px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.1);
+  margin-top:20px;
 }
 
 /* BUTTON */
 button {
-  width: 100%;
-  padding: 16px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 12px;
-  background: #2563eb;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
+  width:100%;
+  padding:14px;
+  margin:8px 0;
+  border:none;
+  border-radius:12px;
+  background:#2563eb;
+  color:white;
+  font-weight:bold;
 }
 
-.emergency { background: #dc2626 !important; }
-.back { background: #374151 !important; }
+.back { background:#374151 !important; }
+.emergency { background:#dc2626 !important; }
 
 /* TIMER */
 .timer {
-  font-size: 34px;
-  font-weight: bold;
-  margin: 10px 0;
+  font-size:32px;
+  font-weight:bold;
+  margin:10px 0;
 }
 
-/* EXERCISES */
-.exercise-box {
-  margin-top: 15px;
-  padding: 10px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.05);
-}
-
+/* EX */
 .ex {
-  background: #1f2937 !important;
-  transition: 0.2s;
+  background:#1f2937 !important;
 }
-
 .ex.active {
-  background: #22c55e !important;
-  transform: scale(1.05);
+  background:#22c55e !important;
 }
 
-/* AUDIO */
-audio { width: 100%; }
+/* CYCLING */
+.cyclingBox {
+  font-size:20px;
+  margin-top:10px;
+  padding:10px;
+  background:rgba(255,255,255,0.05);
+  border-radius:12px;
+}
+
+audio { width:100%; }
 </style>
 </head>
 
@@ -107,6 +99,7 @@ audio { width: 100%; }
 <div class="nav">
   <button onclick="openPage('home')">HOME</button>
   <button onclick="openPage('workout')">WORKOUT</button>
+  <button onclick="openPage('cycling')">CYCLING</button>
   <button onclick="openPage('music')">MUSIC</button>
   <button onclick="openPage('emergency')">EMERGENCY</button>
 </div>
@@ -115,45 +108,47 @@ audio { width: 100%; }
 <div class="page active" id="home">
   <div class="card">
     <h1>🏋️ GYM HUB PRO</h1>
-
-    <button onclick="openPage('workout')">💪 START</button>
+    <button onclick="openPage('workout')">💪 START WORKOUT</button>
+    <button onclick="openPage('cycling')">🚴 CYCLING</button>
     <button onclick="openPage('music')">🎧 MUSIC</button>
-    <button class="emergency" onclick="openPage('emergency')">🆘 EMERGENCY</button>
   </div>
 </div>
 
 <!-- WORKOUT -->
 <div class="page" id="workout">
   <div class="card">
-    <h2>💪 WORKOUT</h2>
-
-    <button onclick="openPage('powerPage')">🔥 POWER HIIT</button>
-
-    <button class="back" onclick="openPage('home')">⬅️ BACK</button>
-  </div>
-</div>
-
-<!-- POWER -->
-<div class="page" id="powerPage">
-  <div class="card">
-    <h2>🔥 POWER HIIT</h2>
+    <h2>💪 POWER HIIT</h2>
 
     <div class="timer" id="timer">READY</div>
 
-    <button onclick="startHIIT()">▶️ START / RESUME</button>
-    <button onclick="stopHIIT()">⏸ PAUSE</button>
+    <button onclick="startHIIT()">START</button>
+    <button onclick="stopHIIT()">PAUSE</button>
 
-    <div class="exercise-box">
-      <h3>💪 EXERCISES</h3>
-
-      <button class="ex" id="ex0">1 - Bench Press</button>
-      <button class="ex" id="ex1">2 - Squat</button>
-      <button class="ex" id="ex2">3 - Deadlift</button>
-      <button class="ex" id="ex3">4 - Shoulder Press</button>
-      <button class="ex" id="ex4">5 - Pull Ups</button>
+    <div>
+      <button class="ex" id="ex0">1 Bench</button>
+      <button class="ex" id="ex1">2 Squat</button>
+      <button class="ex" id="ex2">3 Deadlift</button>
+      <button class="ex" id="ex3">4 Shoulder</button>
+      <button class="ex" id="ex4">5 Pullups</button>
     </div>
 
-    <button class="back" onclick="openPage('workout')">⬅️ BACK</button>
+    <button class="back" onclick="openPage('home')">BACK</button>
+  </div>
+</div>
+
+<!-- CYCLING -->
+<div class="page" id="cycling">
+  <div class="card">
+    <h2>🚴 CYCLING MODE</h2>
+
+    <div class="cyclingBox" id="cyclingUI">
+      READY
+    </div>
+
+    <button onclick="startCycling()">START CYCLING</button>
+    <button onclick="stopCycling()">STOP</button>
+
+    <button class="back" onclick="openPage('home')">BACK</button>
   </div>
 </div>
 
@@ -161,10 +156,8 @@ audio { width: 100%; }
 <div class="page" id="music">
   <div class="card">
     <h2>🎧 MUSIC</h2>
-
-    <button onclick="togglePlay()">▶️ PLAY / PAUSE</button>
-
-    <button class="back" onclick="openPage('home')">⬅️ BACK</button>
+    <button onclick="togglePlay()">PLAY / PAUSE</button>
+    <button class="back" onclick="openPage('home')">BACK</button>
   </div>
 </div>
 
@@ -172,12 +165,9 @@ audio { width: 100%; }
 <div class="page" id="emergency">
   <div class="card">
     <h2>🆘 EMERGENCY</h2>
-
     <button class="emergency" onclick="window.location.href='tel:+393491972057'">
-      📞 CALL
+      CALL
     </button>
-
-    <button class="back" onclick="openPage('home')">⬅️ BACK</button>
   </div>
 </div>
 
@@ -192,116 +182,126 @@ function openPage(id){
   document.getElementById(id).classList.add("active");
 }
 
-/* AUDIO */
+/* MUSIC GLOBAL */
 const audio = document.getElementById("audio");
-
-const playlist = [
-  "https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/beat1.mp3"
-];
-
-function load(){
-  audio.src = playlist[0];
-}
+const playlist = ["https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/beat1.mp3"];
 
 function togglePlay(){
-  if(!audio.src) load();
-
-  if(audio.paused){
-    audio.play();
-  } else {
-    audio.pause();
-  }
+  if(!audio.src) audio.src = playlist[0];
+  audio.paused ? audio.play() : audio.pause();
 }
 
-/* HIIT STATE */
-let hiit = null;
-let isRunning = false;
+/* =========================
+   HIIT
+========================= */
 
-let phase = "work";
-let time = 30;
+let hiit=null;
+let phase="work";
+let time=30;
+let ex=0;
+let set=1;
+let running=false;
 
-let exerciseIndex = 0;
-let setCount = 1;
-
-/* RESET UI */
-function resetHighlight(){
-  for(let i=0;i<5;i++){
-    document.getElementById("ex"+i).classList.remove("active");
-  }
-}
-
-function highlight(){
-  resetHighlight();
-  document.getElementById("ex"+exerciseIndex).classList.add("active");
-}
-
-/* BEEP */
 function beep(){
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
-  const osc = ctx.createOscillator();
-  osc.connect(ctx.destination);
-  osc.frequency.value = 800;
-  osc.start();
-  setTimeout(()=>osc.stop(),150);
+  const ctx = new (window.AudioContext||webkitAudioContext)();
+  const o = ctx.createOscillator();
+  o.connect(ctx.destination);
+  o.frequency.value=800;
+  o.start();
+  setTimeout(()=>o.stop(),150);
 }
 
-/* UI */
-function updateUI(){
+function updateHIIT(){
   document.getElementById("timer").innerText =
-    `E${exerciseIndex+1} - SET ${setCount} - ${phase.toUpperCase()} ${time}`;
+    `E${ex+1} SET ${set} ${phase.toUpperCase()} ${time}`;
 
-  highlight();
+  for(let i=0;i<5;i++)
+    document.getElementById("ex"+i).classList.remove("active");
+
+  document.getElementById("ex"+ex).classList.add("active");
 }
 
-/* LOGIC */
-function nextStep(){
-  if(phase === "work"){
-    phase = "rest";
-    time = 15;
+function nextHIIT(){
+  if(phase==="work"){
+    phase="rest"; time=15;
   } else {
-    phase = "work";
-    time = 30;
+    phase="work"; time=30;
+    set++;
 
-    setCount++;
+    if(set>3){
+      set=1;
+      ex++;
 
-    if(setCount > 3){
-      setCount = 1;
-      exerciseIndex++;
-
-      if(exerciseIndex >= 5){
+      if(ex>=5){
         clearInterval(hiit);
-        hiit = null;
-        isRunning = false;
-        document.getElementById("timer").innerText = "DONE";
-        resetHighlight();
+        running=false;
+        document.getElementById("timer").innerText="DONE";
         return;
       }
     }
   }
 }
 
-/* START / RESUME */
 function startHIIT(){
-  if(isRunning) return;
+  if(running) return;
+  running=true;
 
-  isRunning = true;
-
-  hiit = setInterval(()=>{
-    updateUI();
+  hiit=setInterval(()=>{
+    updateHIIT();
     time--;
 
-    if(time < 0){
+    if(time<0){ beep(); nextHIIT(); }
+  },1000);
+}
+
+function stopHIIT(){
+  clearInterval(hiit);
+  running=false;
+}
+
+/* =========================
+   CYCLING
+========================= */
+
+let cycle=null;
+let cPhase="warmup";
+let cTime=120;
+let calories=0;
+
+function addCal(){
+  if(cPhase==="warmup") calories+=5/60;
+  if(cPhase==="recovery") calories+=7/60;
+  if(cPhase==="sprint") calories+=12/60;
+}
+
+function nextCycle(){
+  if(cPhase==="warmup"){ cPhase="sprint"; cTime=30; }
+  else if(cPhase==="sprint"){ cPhase="recovery"; cTime=60; }
+  else { cPhase="sprint"; cTime=30; }
+}
+
+function updateCycle(){
+  document.getElementById("cyclingUI").innerText =
+    `${cPhase.toUpperCase()} | ${cTime}s | ${calories.toFixed(1)} kcal`;
+}
+
+function startCycling(){
+  clearInterval(cycle);
+
+  cycle=setInterval(()=>{
+    updateCycle();
+    addCal();
+    cTime--;
+
+    if(cTime<0){
       beep();
-      nextStep();
+      nextCycle();
     }
   },1000);
 }
 
-/* PAUSE */
-function stopHIIT(){
-  clearInterval(hiit);
-  hiit = null;
-  isRunning = false;
+function stopCycling(){
+  clearInterval(cycle);
 }
 
 </script>
