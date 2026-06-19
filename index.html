@@ -17,7 +17,6 @@ body {
   padding-bottom: 120px;
 }
 
-/* NAV */
 .nav {
   position: fixed;
   top: 0;
@@ -38,7 +37,6 @@ body {
   font-weight: bold;
 }
 
-/* PAGES */
 .page {
   display: none;
   padding: 20px;
@@ -47,7 +45,6 @@ body {
 
 .active { display: block; }
 
-/* CARD UI */
 .card {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.1);
@@ -56,7 +53,6 @@ body {
   margin-top: 20px;
 }
 
-/* BUTTON */
 button {
   width: 100%;
   padding: 16px;
@@ -73,12 +69,10 @@ button {
   background: #dc2626 !important;
 }
 
-/* BACK BUTTON */
 .back {
   background: #374151 !important;
 }
 
-/* PLAYER */
 .player {
   position: fixed;
   bottom: 0;
@@ -123,9 +117,10 @@ audio { width: 100%; }
   <div class="card">
     <h2>💪 WORKOUT MODE</h2>
 
-    <button onclick="setWorkout('power')">🔥 POWER</button>
-    <button onclick="setWorkout('cardio')">🏃 CARDIO</button>
-    <button onclick="setWorkout('recovery')">🧘 RECOVERY</button>
+    <!-- ❗ SOLO SELEZIONE, NON AVVIA AUDIO -->
+    <button onclick="selectWorkout('power')">🔥 POWER</button>
+    <button onclick="selectWorkout('cardio')">🏃 CARDIO</button>
+    <button onclick="selectWorkout('recovery')">🧘 RECOVERY</button>
 
     <button class="back" onclick="goBack()">⬅️ BACK</button>
   </div>
@@ -167,18 +162,16 @@ audio { width: 100%; }
 
 <script>
 
-/* NAV */
 function openPage(id){
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-/* BACK BUTTON */
 function goBack(){
   openPage("home");
 }
 
-/* EMERGENCY CALL */
+/* EMERGENCY */
 function callICE1(){
   window.location.href = "tel:+393491972057";
 }
@@ -208,12 +201,13 @@ let currentPlaylist = [];
 let current = 0;
 let loopEnabled = true;
 
-/* WORKOUT */
-function setWorkout(type){
+/* ❗ SOLO SELEZIONE (NON AVVIA AUDIO) */
+function selectWorkout(type){
   currentPlaylist = playlists[type];
   current = 0;
+
   openPage("music");
-  loadTrack();
+  loadTrack(); // parte SOLO quando vai in MUSIC
 }
 
 /* LOAD */
@@ -223,6 +217,7 @@ function loadTrack(){
 
   audio.src = t.url;
   title.innerText = "🎧 " + t.name;
+
   audio.play().catch(()=>{});
 }
 
