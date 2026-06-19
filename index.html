@@ -9,7 +9,7 @@ function back() {
   document.getElementById("home").style.display = "block";
 }
 
-// AUDIO PLAYER (MP3 ONLINE GITHUB)
+// AUDIO PLAYER (GITHUB RAW)
 const audio = document.getElementById("audio");
 
 const tracks = [
@@ -20,7 +20,9 @@ let current = 0;
 
 function playMusic() {
   audio.src = tracks[current];
-  audio.play();
+  audio.play().catch(err => {
+    console.log("Audio non avviato:", err);
+  });
 }
 
 function nextTrack() {
