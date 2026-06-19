@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GYM HUB SPOTIFY MODE</title>
+<title>GYM HUB PRO</title>
 
 <style>
 * { box-sizing: border-box; }
@@ -78,7 +78,7 @@ button {
   margin: 10px 0;
 }
 
-/* EX */
+/* EXERCISES */
 .exercise-box {
   margin-top: 15px;
   padding: 10px;
@@ -88,22 +88,15 @@ button {
 
 .ex {
   background: #1f2937 !important;
+  transition: 0.2s;
 }
 
 .ex.active {
   background: #22c55e !important;
+  transform: scale(1.05);
 }
 
-/* PLAYER */
-.player {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: #111827;
-  padding: 10px;
-  border-top: 1px solid #333;
-}
-
+/* AUDIO */
 audio { width: 100%; }
 </style>
 </head>
@@ -121,7 +114,7 @@ audio { width: 100%; }
 <!-- HOME -->
 <div class="page active" id="home">
   <div class="card">
-    <h1>🏋️ GYM HUB</h1>
+    <h1>🏋️ GYM HUB PRO</h1>
 
     <button onclick="openPage('workout')">💪 START</button>
     <button onclick="openPage('music')">🎧 MUSIC</button>
@@ -132,7 +125,7 @@ audio { width: 100%; }
 <!-- WORKOUT -->
 <div class="page" id="workout">
   <div class="card">
-    <h2>💪 WORKOUT MODE</h2>
+    <h2>💪 WORKOUT</h2>
 
     <button onclick="openPage('powerPage')">🔥 POWER HIIT</button>
 
@@ -147,17 +140,17 @@ audio { width: 100%; }
 
     <div class="timer" id="timer">READY</div>
 
-    <button onclick="startHIIT()">▶️ START</button>
-    <button onclick="stopHIIT()">⏹ STOP</button>
+    <button onclick="startHIIT()">▶️ START / RESUME</button>
+    <button onclick="stopHIIT()">⏸ PAUSE</button>
 
     <div class="exercise-box">
       <h3>💪 EXERCISES</h3>
 
-      <button class="ex">1 - Bench Press</button>
-      <button class="ex">2 - Squat</button>
-      <button class="ex">3 - Deadlift</button>
-      <button class="ex">4 - Shoulder Press</button>
-      <button class="ex">5 - Pull Ups</button>
+      <button class="ex" id="ex0">1 - Bench Press</button>
+      <button class="ex" id="ex1">2 - Squat</button>
+      <button class="ex" id="ex2">3 - Deadlift</button>
+      <button class="ex" id="ex3">4 - Shoulder Press</button>
+      <button class="ex" id="ex4">5 - Pull Ups</button>
     </div>
 
     <button class="back" onclick="openPage('workout')">⬅️ BACK</button>
@@ -199,17 +192,15 @@ function openPage(id){
   document.getElementById(id).classList.add("active");
 }
 
-/* AUDIO GLOBAL */
+/* AUDIO */
 const audio = document.getElementById("audio");
 
 const playlist = [
   "https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/beat1.mp3"
 ];
 
-let index = 0;
-
 function load(){
-  audio.src = playlist[index];
+  audio.src = playlist[0];
 }
 
 function togglePlay(){
@@ -222,14 +213,29 @@ function togglePlay(){
   }
 }
 
-/* HIIT */
-let hiit;
+/* HIIT STATE */
+let hiit = null;
+let isRunning = false;
+
 let phase = "work";
 let time = 30;
 
 let exerciseIndex = 0;
 let setCount = 1;
 
+/* RESET UI */
+function resetHighlight(){
+  for(let i=0;i<5;i++){
+    document.getElementById("ex"+i).classList.remove("active");
+  }
+}
+
+function highlight(){
+  resetHighlight();
+  document.getElementById("ex"+exerciseIndex).classList.add("active");
+}
+
+/* BEEP */
 function beep(){
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
   const osc = ctx.createOscillator();
@@ -239,11 +245,15 @@ function beep(){
   setTimeout(()=>osc.stop(),150);
 }
 
+/* UI */
 function updateUI(){
   document.getElementById("timer").innerText =
     `E${exerciseIndex+1} - SET ${setCount} - ${phase.toUpperCase()} ${time}`;
+
+  highlight();
 }
 
+/* LOGIC */
 function nextStep(){
   if(phase === "work"){
     phase = "rest";
@@ -260,20 +270,21 @@ function nextStep(){
 
       if(exerciseIndex >= 5){
         clearInterval(hiit);
+        hiit = null;
+        isRunning = false;
         document.getElementById("timer").innerText = "DONE";
+        resetHighlight();
         return;
       }
     }
   }
 }
 
+/* START / RESUME */
 function startHIIT(){
-  clearInterval(hiit);
+  if(isRunning) return;
 
-  exerciseIndex = 0;
-  setCount = 1;
-  phase = "work";
-  time = 30;
+  isRunning = true;
 
   hiit = setInterval(()=>{
     updateUI();
@@ -286,9 +297,11 @@ function startHIIT(){
   },1000);
 }
 
+/* PAUSE */
 function stopHIIT(){
   clearInterval(hiit);
-  document.getElementById("timer").innerText = "STOP";
+  hiit = null;
+  isRunning = false;
 }
 
 </script>
