@@ -81,9 +81,9 @@ button {
   border-radius: 20px;
 }
 
-/* EXERCISES POWER */
+/* EXERCISES */
 .exercise-box {
-  margin-top: 20px;
+  margin-top: 15px;
   padding: 10px;
   border-radius: 12px;
   background: rgba(255,255,255,0.05);
@@ -96,6 +96,12 @@ button {
 
 .ex.active {
   background: #22c55e !important;
+}
+
+/* TIMER */
+.timer {
+  font-size: 28px;
+  margin: 10px 0;
 }
 
 /* PLAYER */
@@ -145,11 +151,27 @@ audio { width: 100%; }
   <div class="card">
     <h2>💪 WORKOUT MODE</h2>
 
-    <button onclick="setPlaylist('power')">🔥 POWER</button>
+    <button onclick="openPage('powerPage')">🔥 POWER</button>
     <button onclick="setPlaylist('cardio')">🏃 CARDIO</button>
     <button onclick="setPlaylist('recovery')">🧘 RECOVERY</button>
 
-    <!-- 🔥 POWER EXERCISES -->
+    <button class="back" onclick="openPage('home')">⬅️ BACK</button>
+  </div>
+</div>
+
+<!-- 🔥 POWER PAGE -->
+<div class="page" id="powerPage">
+  <div class="card">
+    <h2>🔥 POWER MODE</h2>
+
+    <!-- TIMER -->
+    <div class="timer" id="timer">00:00</div>
+
+    <button onclick="startTimer()">▶️ START TIMER</button>
+    <button onclick="stopTimer()">⏹ STOP TIMER</button>
+
+    <button onclick="startWorkoutFlow()">⚡ START WORKOUT FLOW</button>
+
     <div class="exercise-box">
       <h3>💪 EXERCISES</h3>
 
@@ -158,10 +180,9 @@ audio { width: 100%; }
       <button class="ex" onclick="toggleEx(this)">💀 Deadlift</button>
       <button class="ex" onclick="toggleEx(this)">💪 Shoulder Press</button>
       <button class="ex" onclick="toggleEx(this)">🧲 Pull Ups</button>
-
     </div>
 
-    <button class="back" onclick="openPage('home')">⬅️ BACK</button>
+    <button class="back" onclick="openPage('workout')">⬅️ BACK</button>
   </div>
 </div>
 
@@ -207,6 +228,34 @@ function openPage(id){
   document.getElementById(id).classList.add("active");
 }
 
+/* EXERCISES */
+function toggleEx(btn){
+  btn.classList.toggle("active");
+}
+
+/* TIMER */
+let timer;
+let seconds = 0;
+
+function startTimer(){
+  timer = setInterval(()=>{
+    seconds++;
+    let min = String(Math.floor(seconds/60)).padStart(2,'0');
+    let sec = String(seconds%60).padStart(2,'0');
+    document.getElementById("timer").innerText = `${min}:${sec}`;
+  },1000);
+}
+
+function stopTimer(){
+  clearInterval(timer);
+}
+
+/* WORKOUT FLOW */
+function startWorkoutFlow(){
+  openPage("music");
+  togglePlay();
+}
+
 /* EMERGENCY */
 function callICE1(){
   window.location.href="tel:+393491972057";
@@ -214,11 +263,6 @@ function callICE1(){
 
 function callICE2(){
   window.location.href="tel:+393479876543";
-}
-
-/* EXERCISES TOGGLE */
-function toggleEx(btn){
-  btn.classList.toggle("active");
 }
 
 /* AUDIO */
@@ -241,20 +285,17 @@ let currentPlaylist = playlists.power;
 let current = 0;
 let loopEnabled = true;
 
-/* SET PLAYLIST */
 function setPlaylist(type){
   currentPlaylist = playlists[type];
   current = 0;
 }
 
-/* LOAD TRACK */
 function loadTrack(){
   const t = currentPlaylist[current];
   audio.src = t.url;
   title.innerText = "🎧 " + t.name;
 }
 
-/* PLAY / PAUSE */
 function togglePlay(){
   if(audio.paused){
     loadTrack();
@@ -264,19 +305,16 @@ function togglePlay(){
   }
 }
 
-/* NEXT */
 function nextTrack(){
   current = (current + 1) % currentPlaylist.length;
   loadTrack();
   audio.play();
 }
 
-/* LOOP */
 function toggleLoop(){
   loopEnabled = !loopEnabled;
 }
 
-/* AUTO NEXT */
 audio.addEventListener("ended", ()=>{
   if(loopEnabled){
     nextTrack();
