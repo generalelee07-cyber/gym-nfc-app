@@ -1,173 +1,39 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GYM NFC APP</title>
+// NAVIGAZIONE
+function openPage(page) {
+  document.getElementById("home").style.display = "none";
+  document.getElementById(page).classList.remove("hidden");
+}
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+function back() {
+  document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+  document.getElementById("home").style.display = "block";
+}
 
-    body {
-      margin: 0;
-      padding: 0;
-      width: 100vw;
-      height: 100vh;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, #0a0f1f, #111827);
-      color: white;
-    }
+// AUDIO PLAYER (MP3 ONLINE GITHUB)
+const audio = document.getElementById("audio");
 
-    .app {
-      width: 100vw;
-      min-height: 100vh;
-      padding: 25px;
-      text-align: center;
-    }
+const tracks = [
+  "https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/acoustic_guitar.mp3",
+];
 
-    h1 {
-      margin-bottom: 5px;
-    }
+let current = 0;
 
-    .sub {
-      opacity: 0.6;
-      margin-bottom: 25px;
-    }
+function playMusic() {
+  audio.src = tracks[current];
+  audio.play();
+}
 
-    button {
-      width: 100%;
-      padding: 16px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 12px;
-      background: #2563eb;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-    }
+function nextTrack() {
+  current = (current + 1) % tracks.length;
+  playMusic();
+}
 
-    button:active {
-      transform: scale(0.97);
-    }
+// LINK ESTERNI
+function openExternal(type) {
+  const links = {
+    progress: "https://docs.google.com/spreadsheets",
+    call: "tel:+393331234567"
+  };
 
-    .page {
-      padding: 20px;
-      text-align: center;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    audio {
-      width: 100%;
-      margin-top: 15px;
-    }
-  </style>
-</head>
-
-<body>
-
-  <!-- HOME -->
-  <div class="app" id="home">
-    <h1>🏋️ GYM HUB</h1>
-    <p class="sub">NFC Fitness System</p>
-
-    <button onclick="openPage('music')">▶️ START MUSIC</button>
-    <button onclick="openPage('workout')">💪 WORKOUT</button>
-    <button onclick="openPage('progress')">📈 PROGRESS</button>
-    <button onclick="openPage('emergency')">🆘 EMERGENCY</button>
-    <button onclick="openPage('contacts')">📞 CONTACTS</button>
-  </div>
-
-  <!-- MUSIC -->
-  <div class="page hidden" id="music">
-    <h2>▶️ MUSIC</h2>
-    <p>Workout motivation mix</p>
-
-    <audio id="audio" controls></audio>
-
-    <button onclick="playMusic()">▶️ PLAY MUSIC</button>
-    <button onclick="nextTrack()">⏭ NEXT TRACK</button>
-    <button onclick="back()">⬅️ BACK</button>
-  </div>
-
-  <!-- WORKOUT -->
-  <div class="page hidden" id="workout">
-    <h2>💪 WORKOUT</h2>
-    <p>A: Chest / Triceps</p>
-    <p>B: Back / Biceps</p>
-    <p>C: Legs / Abs</p>
-    <button onclick="back()">⬅️ BACK</button>
-  </div>
-
-  <!-- PROGRESS -->
-  <div class="page hidden" id="progress">
-    <h2>📈 PROGRESS</h2>
-    <p>Track su Google Sheets</p>
-    <button onclick="openExternal('progress')">OPEN SHEET</button>
-    <button onclick="back()">⬅️ BACK</button>
-  </div>
-
-  <!-- EMERGENCY -->
-  <div class="page hidden" id="emergency">
-    <h2>🆘 EMERGENCY</h2>
-    <p><b>ICE 1:</b> +39 349 1972057</p>
-    <p><b>ICE 2:</b> +39 347 9876543</p>
-    <p><b>Sangue:</b> O+</p>
-    <button onclick="back()">⬅️ BACK</button>
-  </div>
-
-  <!-- CONTACTS -->
-  <div class="page hidden" id="contacts">
-    <h2>📞 CONTACTS EMERGENCY</h2>
-    <button onclick="openExternal('call')">CALL ICE</button>
-    <button onclick="back()">⬅️ BACK</button>
-  </div>
-
-  <script>
-    // NAVIGAZIONE
-    function openPage(page) {
-      document.getElementById("home").style.display = "none";
-      document.getElementById(page).classList.remove("hidden");
-    }
-
-    function back() {
-      document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
-      document.getElementById("home").style.display = "block";
-    }
-
-    // AUDIO PLAYER (MP3 LOCALI)
-    const audio = document.getElementById("audio");
-
-    const tracks = [
-      "chitarra_acustica.mp3",
-    ];
-
-    let current = 0;
-
-    function playMusic() {
-      audio.src = tracks[current];
-      audio.play();
-    }
-
-    function nextTrack() {
-      current = (current + 1) % tracks.length;
-      playMusic();
-    }
-
-    // LINK ESTERNI
-    function openExternal(type) {
-      const links = {
-        progress: "https://docs.google.com/spreadsheets",
-        call: "tel:+393331234567"
-      };
-
-      window.open(links[type], "_blank");
-    }
-  </script>
-
-</body>
-</html>
+  window.open(links[type], "_blank");
+}
