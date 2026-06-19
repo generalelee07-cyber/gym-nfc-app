@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GYM NFC PRO</title>
+<title>GYM NFC SPOTIFY MODE</title>
 
 <style>
 * { box-sizing: border-box; }
@@ -26,7 +26,6 @@ body {
   background: #111827;
   padding: 10px 0;
   border-bottom: 1px solid #333;
-  z-index: 10;
 }
 
 .nav button {
@@ -47,9 +46,9 @@ body {
 
 .card {
   background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 16px;
   padding: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
   margin-top: 20px;
 }
 
@@ -65,13 +64,9 @@ button {
   font-weight: bold;
 }
 
-.emergency {
-  background: #dc2626 !important;
-}
+.emergency { background: #dc2626 !important; }
 
-.back {
-  background: #374151 !important;
-}
+.back { background: #374151 !important; }
 
 .player {
   position: fixed;
@@ -104,11 +99,11 @@ audio { width: 100%; }
 <!-- HOME -->
 <div class="page active" id="home">
   <div class="card">
-    <h1>🏋️ GYM HUB PRO</h1>
+    <h1>🏋️ GYM HUB SPOTIFY</h1>
 
     <button onclick="openPage('workout')">💪 START WORKOUT</button>
     <button onclick="openPage('music')">🎧 MUSIC</button>
-    <button onclick="openPage('emergency')" class="emergency">🆘 EMERGENCY</button>
+    <button class="emergency" onclick="openPage('emergency')">🆘 EMERGENCY</button>
   </div>
 </div>
 
@@ -117,10 +112,9 @@ audio { width: 100%; }
   <div class="card">
     <h2>💪 WORKOUT MODE</h2>
 
-    <!-- ❗ SOLO SELEZIONE, NON AVVIA AUDIO -->
-    <button onclick="selectWorkout('power')">🔥 POWER</button>
-    <button onclick="selectWorkout('cardio')">🏃 CARDIO</button>
-    <button onclick="selectWorkout('recovery')">🧘 RECOVERY</button>
+    <button onclick="setPlaylist('power')">🔥 POWER</button>
+    <button onclick="setPlaylist('cardio')">🏃 CARDIO</button>
+    <button onclick="setPlaylist('recovery')">🧘 RECOVERY</button>
 
     <button class="back" onclick="goBack()">⬅️ BACK</button>
   </div>
@@ -133,7 +127,7 @@ audio { width: 100%; }
 
     <button onclick="togglePlay()">⏯ PLAY / PAUSE</button>
     <button onclick="nextTrack()">⏭ NEXT</button>
-    <button onclick="toggleLoop()">🔁 LOOP ON/OFF</button>
+    <button onclick="toggleLoop()">🔁 LOOP</button>
 
     <button class="back" onclick="goBack()">⬅️ BACK</button>
   </div>
@@ -156,81 +150,76 @@ audio { width: 100%; }
 
 <!-- PLAYER -->
 <div class="player">
-  <div class="song-title" id="songTitle">Nessuna musica</div>
+  <div id="songTitle" class="song-title">Nessuna musica</div>
   <audio id="audio" controls></audio>
 </div>
 
 <script>
 
+/* NAV */
 function openPage(id){
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
+/* BACK */
 function goBack(){
   openPage("home");
 }
 
 /* EMERGENCY */
-function callICE1(){
-  window.location.href = "tel:+393491972057";
-}
-
-function callICE2(){
-  window.location.href = "tel:+393479876543";
-}
+function callICE1(){ window.location.href="tel:+393491972057"; }
+function callICE2(){ window.location.href="tel:+393479876543"; }
 
 /* AUDIO */
 const audio = document.getElementById("audio");
 const title = document.getElementById("songTitle");
 
-/* PLAYLIST */
 const playlists = {
   power: [
-    { name:"Power Beat", url:"https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/beat1.mp3" }
+    {name:"Power Beat", url:"https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/beat1.mp3"}
   ],
   cardio: [
-    { name:"Cardio Run", url:"https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/motivation2.mp3" }
+    {name:"Cardio Run", url:"https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/motivation2.mp3"}
   ],
   recovery: [
-    { name:"Relax Guitar", url:"https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/acoustic_guitar.mp3" }
+    {name:"Relax Guitar", url:"https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/acoustic_guitar.mp3"}
   ]
 };
 
-let currentPlaylist = [];
+let currentPlaylist = playlists.power;
 let current = 0;
 let loopEnabled = true;
 
-/* ❗ SOLO SELEZIONE (NON AVVIA AUDIO) */
-function selectWorkout(type){
+/* 🔥 SOLO SET PLAYLIST (NON AVVIA AUDIO) */
+function setPlaylist(type){
   currentPlaylist = playlists[type];
   current = 0;
-
+  loadTrack();
   openPage("music");
-  loadTrack(); // parte SOLO quando vai in MUSIC
 }
 
 /* LOAD */
 function loadTrack(){
   const t = currentPlaylist[current];
-  if(!t) return;
-
   audio.src = t.url;
   title.innerText = "🎧 " + t.name;
-
-  audio.play().catch(()=>{});
 }
 
-/* PLAY/PAUSE */
+/* PLAY / PAUSE */
 function togglePlay(){
-  if(audio.paused) audio.play();
-  else audio.pause();
+  if(audio.paused){
+    audio.play();
+  } else {
+    audio.pause();
+  }
 }
 
 /* NEXT */
 function nextTrack(){
   current = (current + 1) % currentPlaylist.length;
   loadTrack();
+  audio.play();
 }
 
 /* LOOP */
@@ -242,8 +231,6 @@ function toggleLoop(){
 audio.addEventListener("ended", ()=>{
   if(loopEnabled){
     nextTrack();
-  } else {
-    audio.pause();
   }
 });
 
