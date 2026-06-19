@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GYM NFC PRO APP</title>
+<title>GYM NFC PRO</title>
 
 <style>
 * { box-sizing: border-box; }
@@ -47,7 +47,7 @@ body {
 
 .active { display: block; }
 
-/* CARD UI PRO */
+/* CARD UI */
 .card {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.1);
@@ -113,7 +113,7 @@ audio { width: 100%; }
   </div>
 </div>
 
-<!-- WORKOUT (PLAYLIST) -->
+<!-- WORKOUT -->
 <div class="page" id="workout">
   <div class="card">
     <h2>💪 WORKOUT MODE</h2>
@@ -131,6 +131,7 @@ audio { width: 100%; }
 
     <button onclick="togglePlay()">⏯ PLAY / PAUSE</button>
     <button onclick="nextTrack()">⏭ NEXT</button>
+    <button onclick="toggleLoop()">🔁 LOOP ON/OFF</button>
   </div>
 </div>
 
@@ -157,14 +158,13 @@ audio { width: 100%; }
 
 /* NAV */
 function openPage(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 
-  // 📲 NFC READY: apertura diretta EMERGENCY
-  console.log("NFC READY ->", id);
+  console.log("NFC READY →", id);
 }
 
-/* 📞 EMERGENCY CALL */
+/* 📞 EMERGENCY */
 function callICE1(){
   window.location.href = "tel:+393491972057";
 }
@@ -177,28 +177,29 @@ function callICE2(){
 const audio = document.getElementById("audio");
 const title = document.getElementById("songTitle");
 
-/* 🎵 PLAYLIST PER ALLENAMENTO */
+/* PLAYLIST */
 const playlists = {
   power: [
-    {name:"Power Beat", url:"https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/beat1.mp3"}
+    { name:"Power Beat", url:"https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/beat1.mp3" }
   ],
   cardio: [
-    {name:"Cardio Run", url:"https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/motivation2.mp3"}
+    { name:"Cardio Run", url:"https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/motivation2.mp3" }
   ],
   recovery: [
-    {name:"Relax Guitar", url:"https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/acoustic_guitar.mp3"}
+    { name:"Relax Guitar", url:"https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/acoustic_guitar.mp3" }
   ]
 };
 
 let currentPlaylist = [];
 let current = 0;
+let loopEnabled = true;
 
-/* SET WORKOUT = cambia playlist */
+/* WORKOUT SELECT */
 function setWorkout(type){
   currentPlaylist = playlists[type];
   current = 0;
-  loadTrack();
   openPage("music");
+  loadTrack();
 }
 
 /* LOAD TRACK */
@@ -209,21 +210,30 @@ function loadTrack(){
   audio.play().catch(()=>{});
 }
 
+/* PLAY/PAUSE */
+function togglePlay(){
+  if(audio.paused) audio.play();
+  else audio.pause();
+}
+
 /* NEXT */
 function nextTrack(){
   current = (current + 1) % currentPlaylist.length;
   loadTrack();
 }
 
-/* PLAY / PAUSE */
-function togglePlay(){
-  if(audio.paused) audio.play();
-  else audio.pause();
+/* LOOP */
+function toggleLoop(){
+  loopEnabled = !loopEnabled;
 }
 
 /* AUTO NEXT */
 audio.addEventListener("ended", ()=>{
-  nextTrack();
+  if(loopEnabled){
+    nextTrack();
+  } else {
+    audio.pause();
+  }
 });
 
 </script>
