@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GYM NFC APP PRO</title>
+  <title>GYM NFC APP PRO MAX</title>
 
   <style>
     * { box-sizing: border-box; }
@@ -75,9 +75,9 @@
 
 <!-- HOME -->
 <div class="app page active" id="home">
-  <h1>🏋️ GYM HUB PRO</h1>
+  <h1>🏋️ GYM HUB PRO MAX</h1>
 
-  <button onclick="openPage('music')">▶️ MUSIC</button>
+  <button onclick="openPage('music')">🎧 MUSIC</button>
   <button onclick="openPage('workout')">💪 WORKOUT</button>
   <button onclick="openPage('progress')">📈 PROGRESS</button>
   <button onclick="openPage('emergency')">🆘 EMERGENCY</button>
@@ -111,7 +111,7 @@
 
 <!-- PLAYER FISSO -->
 <div class="player">
-  <div class="song-title" id="songTitle">Nessuna canzone in riproduzione</div>
+  <div class="song-title" id="songTitle">Nessuna canzone</div>
   <audio id="audio" controls></audio>
 </div>
 
@@ -123,7 +123,7 @@ function openPage(id) {
   document.getElementById(id).classList.add("active");
 }
 
-// AUDIO
+// AUDIO SYSTEM
 const audio = document.getElementById("audio");
 const title = document.getElementById("songTitle");
 
@@ -137,7 +137,7 @@ const tracks = [
     url: "https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/beat1.mp3"
   },
   {
-    name: "Motivation",
+    name: "Motivation Power",
     url: "https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/motivation2.mp3"
   }
 ];
@@ -146,13 +146,36 @@ let current = 0;
 
 // PLAY
 function playMusic() {
+  loadTrack(current);
+}
+
+// CARICA TRACCIA
+function loadTrack(index) {
+  current = index;
   audio.src = tracks[current].url;
   title.innerText = "🎧 " + tracks[current].name;
   audio.load();
   audio.play().catch(err => console.log(err));
+
+  // vibrazione (mobile)
+  if (navigator.vibrate) {
+    navigator.vibrate(100);
+  }
 }
 
-// PAUSA / RIPRENDI
+// NEXT
+function nextTrack() {
+  let next = (current + 1) % tracks.length;
+  loadTrack(next);
+}
+
+// SHUFFLE
+function shuffleTrack() {
+  let random = Math.floor(Math.random() * tracks.length);
+  loadTrack(random);
+}
+
+// PLAY / PAUSE
 function togglePlay() {
   if (audio.paused) {
     audio.play();
@@ -161,17 +184,10 @@ function togglePlay() {
   }
 }
 
-// NEXT
-function nextTrack() {
-  current = (current + 1) % tracks.length;
-  playMusic();
-}
-
-// SHUFFLE
-function shuffleTrack() {
-  current = Math.floor(Math.random() * tracks.length);
-  playMusic();
-}
+// 🔁 AUTOPLAY CONTINUO
+audio.addEventListener("ended", () => {
+  nextTrack();
+});
 
 </script>
 
