@@ -51,9 +51,20 @@
       display: block;
     }
 
+    /* PLAYER FISSO */
+    .player {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #111827;
+      padding: 10px;
+      text-align: center;
+      border-top: 1px solid #333;
+    }
+
     audio {
       width: 100%;
-      margin-top: 15px;
     }
   </style>
 </head>
@@ -74,48 +85,41 @@
 <div class="page" id="music">
   <h2>🎵 MUSIC</h2>
 
-  <audio id="audio" controls></audio>
-
   <button onclick="playMusic()">▶️ PLAY</button>
   <button onclick="nextTrack()">⏭ NEXT</button>
   <button onclick="shuffleTrack()">🔀 SHUFFLE</button>
-  <button onclick="back()">⬅️ BACK</button>
 </div>
 
 <!-- WORKOUT -->
 <div class="page" id="workout">
   <h2>💪 WORKOUT</h2>
   <p>Chest / Back / Legs</p>
-  <button onclick="back()">⬅️ BACK</button>
 </div>
 
 <!-- PROGRESS -->
 <div class="page" id="progress">
   <h2>📈 PROGRESS</h2>
-  <button onclick="back()">⬅️ BACK</button>
 </div>
 
 <!-- EMERGENCY -->
 <div class="page" id="emergency">
   <h2>🆘 EMERGENCY</h2>
-  <p>ICE numeri salvati</p>
-  <button onclick="back()">⬅️ BACK</button>
+</div>
+
+<!-- PLAYER SEMPRE ATTIVO -->
+<div class="player">
+  <audio id="audio" controls></audio>
 </div>
 
 <script>
 
-// NAVIGAZIONE
+// NAVIGAZIONE (NON TOCCA AUDIO)
 function openPage(id) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-function back() {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById("home").classList.add("active");
-}
-
-// AUDIO PLAYER (PLAYLIST + NEXT + SHUFFLE)
+// AUDIO SYSTEM
 const audio = document.getElementById("audio");
 
 const tracks = [
