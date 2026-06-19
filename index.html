@@ -76,7 +76,9 @@
 
   <audio id="audio" controls></audio>
 
-  <button onclick="playMusic()">▶️ PLAY MUSIC</button>
+  <button onclick="playMusic()">▶️ PLAY</button>
+  <button onclick="nextTrack()">⏭ NEXT</button>
+  <button onclick="shuffleTrack()">🔀 SHUFFLE</button>
   <button onclick="back()">⬅️ BACK</button>
 </div>
 
@@ -113,19 +115,34 @@ function back() {
   document.getElementById("home").classList.add("active");
 }
 
-// AUDIO PLAYER (CORRETTO GITHUB RAW)
+// AUDIO PLAYER (PLAYLIST + NEXT + SHUFFLE)
 const audio = document.getElementById("audio");
 
 const tracks = [
-  "https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/acoustic_guitar.mp3"
+  "https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/acoustic_guitar.mp3",
+  "https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/beat1.mp3",
+  "https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/motivation2.mp3"
 ];
 
+let current = 0;
+
+// PLAY
 function playMusic() {
-  audio.src = tracks[0];
+  audio.src = tracks[current];
   audio.load();
-  audio.play().catch(err => {
-    console.log("Errore audio:", err);
-  });
+  audio.play().catch(err => console.log(err));
+}
+
+// NEXT
+function nextTrack() {
+  current = (current + 1) % tracks.length;
+  playMusic();
+}
+
+// SHUFFLE
+function shuffleTrack() {
+  current = Math.floor(Math.random() * tracks.length);
+  playMusic();
 }
 
 </script>
