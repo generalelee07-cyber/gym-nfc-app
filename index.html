@@ -73,6 +73,11 @@ button {
   background: #dc2626 !important;
 }
 
+/* BACK BUTTON */
+.back {
+  background: #374151 !important;
+}
+
 /* PLAYER */
 .player {
   position: fixed;
@@ -121,6 +126,8 @@ audio { width: 100%; }
     <button onclick="setWorkout('power')">🔥 POWER</button>
     <button onclick="setWorkout('cardio')">🏃 CARDIO</button>
     <button onclick="setWorkout('recovery')">🧘 RECOVERY</button>
+
+    <button class="back" onclick="goBack()">⬅️ BACK</button>
   </div>
 </div>
 
@@ -132,6 +139,8 @@ audio { width: 100%; }
     <button onclick="togglePlay()">⏯ PLAY / PAUSE</button>
     <button onclick="nextTrack()">⏭ NEXT</button>
     <button onclick="toggleLoop()">🔁 LOOP ON/OFF</button>
+
+    <button class="back" onclick="goBack()">⬅️ BACK</button>
   </div>
 </div>
 
@@ -145,6 +154,8 @@ audio { width: 100%; }
 
     <button class="emergency" onclick="callICE1()">📞 CALL ICE 1</button>
     <button class="emergency" onclick="callICE2()">📞 CALL ICE 2</button>
+
+    <button class="back" onclick="goBack()">⬅️ BACK</button>
   </div>
 </div>
 
@@ -160,20 +171,14 @@ audio { width: 100%; }
 function openPage(id){
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
-
-  console.log("PAGE →", id);
-
-  /* 🔥 FIX: MUSIC AUTO START */
-  if(id === "music"){
-    if(currentPlaylist.length === 0){
-      currentPlaylist = playlists.power;
-      current = 0;
-    }
-    loadTrack();
-  }
 }
 
-/* 📞 EMERGENCY */
+/* BACK BUTTON */
+function goBack(){
+  openPage("home");
+}
+
+/* EMERGENCY CALL */
 function callICE1(){
   window.location.href = "tel:+393491972057";
 }
@@ -182,7 +187,7 @@ function callICE2(){
   window.location.href = "tel:+393479876543";
 }
 
-/* 🎧 AUDIO */
+/* AUDIO */
 const audio = document.getElementById("audio");
 const title = document.getElementById("songTitle");
 
@@ -203,7 +208,7 @@ let currentPlaylist = [];
 let current = 0;
 let loopEnabled = true;
 
-/* WORKOUT SELECT */
+/* WORKOUT */
 function setWorkout(type){
   currentPlaylist = playlists[type];
   current = 0;
@@ -211,15 +216,13 @@ function setWorkout(type){
   loadTrack();
 }
 
-/* LOAD TRACK */
+/* LOAD */
 function loadTrack(){
   const t = currentPlaylist[current];
-
   if(!t) return;
 
   audio.src = t.url;
   title.innerText = "🎧 " + t.name;
-
   audio.play().catch(()=>{});
 }
 
