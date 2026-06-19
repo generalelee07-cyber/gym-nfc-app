@@ -81,6 +81,23 @@ button {
   border-radius: 20px;
 }
 
+/* EXERCISES POWER */
+.exercise-box {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+}
+
+.ex {
+  background: #1f2937 !important;
+  font-size: 14px;
+}
+
+.ex.active {
+  background: #22c55e !important;
+}
+
 /* PLAYER */
 .player {
   position: fixed;
@@ -131,6 +148,18 @@ audio { width: 100%; }
     <button onclick="setPlaylist('power')">🔥 POWER</button>
     <button onclick="setPlaylist('cardio')">🏃 CARDIO</button>
     <button onclick="setPlaylist('recovery')">🧘 RECOVERY</button>
+
+    <!-- 🔥 POWER EXERCISES -->
+    <div class="exercise-box">
+      <h3>💪 EXERCISES</h3>
+
+      <button class="ex" onclick="toggleEx(this)">🏋️ Bench Press</button>
+      <button class="ex" onclick="toggleEx(this)">🦵 Squat</button>
+      <button class="ex" onclick="toggleEx(this)">💀 Deadlift</button>
+      <button class="ex" onclick="toggleEx(this)">💪 Shoulder Press</button>
+      <button class="ex" onclick="toggleEx(this)">🧲 Pull Ups</button>
+
+    </div>
 
     <button class="back" onclick="openPage('home')">⬅️ BACK</button>
   </div>
@@ -187,6 +216,11 @@ function callICE2(){
   window.location.href="tel:+393479876543";
 }
 
+/* EXERCISES TOGGLE */
+function toggleEx(btn){
+  btn.classList.toggle("active");
+}
+
 /* AUDIO */
 const audio = document.getElementById("audio");
 const title = document.getElementById("songTitle");
@@ -207,13 +241,13 @@ let currentPlaylist = playlists.power;
 let current = 0;
 let loopEnabled = true;
 
-/* 🔥 SOLO SELEZIONE (NON CAMBIA PAGINA) */
+/* SET PLAYLIST */
 function setPlaylist(type){
   currentPlaylist = playlists[type];
   current = 0;
 }
 
-/* LOAD */
+/* LOAD TRACK */
 function loadTrack(){
   const t = currentPlaylist[current];
   audio.src = t.url;
