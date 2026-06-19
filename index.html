@@ -161,7 +161,16 @@ function openPage(id){
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 
-  console.log("NFC READY →", id);
+  console.log("PAGE →", id);
+
+  /* 🔥 FIX: MUSIC AUTO START */
+  if(id === "music"){
+    if(currentPlaylist.length === 0){
+      currentPlaylist = playlists.power;
+      current = 0;
+    }
+    loadTrack();
+  }
 }
 
 /* 📞 EMERGENCY */
@@ -205,8 +214,12 @@ function setWorkout(type){
 /* LOAD TRACK */
 function loadTrack(){
   const t = currentPlaylist[current];
+
+  if(!t) return;
+
   audio.src = t.url;
   title.innerText = "🎧 " + t.name;
+
   audio.play().catch(()=>{});
 }
 
