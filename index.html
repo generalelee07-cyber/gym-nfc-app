@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GYM NFC SPOTIFY MODE</title>
+<title>GYM HUB SPOTIFY MODE</title>
 
 <style>
 * { box-sizing: border-box; }
@@ -160,10 +160,10 @@ audio { width: 100%; }
   </div>
 </div>
 
-<!-- POWER PAGE -->
+<!-- POWER -->
 <div class="page" id="powerPage">
   <div class="card">
-    <h2>🔥 POWER HIIT MODE</h2>
+    <h2>🔥 POWER HIIT</h2>
 
     <div class="timer" id="timer">READY</div>
 
@@ -178,7 +178,6 @@ audio { width: 100%; }
       <button class="ex" onclick="toggleEx(this)">💀 Deadlift</button>
       <button class="ex" onclick="toggleEx(this)">💪 Shoulder Press</button>
       <button class="ex" onclick="toggleEx(this)">🧲 Pull Ups</button>
-
     </div>
 
     <button class="back" onclick="openPage('workout')">⬅️ BACK</button>
@@ -224,7 +223,7 @@ function openPage(id){
   document.getElementById(id).classList.add("active");
 }
 
-/* EXERCISES */
+/* EX */
 function toggleEx(btn){
   btn.classList.toggle("active");
 }
@@ -233,10 +232,17 @@ function toggleEx(btn){
 function callICE1(){ window.location.href="tel:+393491972057"; }
 function callICE2(){ window.location.href="tel:+393479876543"; }
 
-/* AUDIO */
+/* AUDIO CORE */
 const audio = document.getElementById("audio");
 
+let currentPlaylist = null;
+let current = 0;
+let loopEnabled = true;
+
 const playlists = {
+  power: [
+    {name:"Power Beat", url:"https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/beat1.mp3"}
+  ],
   cardio: [
     {name:"Cardio Run", url:"https://raw.githubusercontent.com/generalelee07-cyber/gym-nfc-app/main/motivation2.mp3"}
   ],
@@ -245,24 +251,21 @@ const playlists = {
   ]
 };
 
-let currentPlaylist = playlists.cardio;
-let current = 0;
-let loopEnabled = true;
-
 function setPlaylist(type){
   currentPlaylist = playlists[type];
   current = 0;
+  loadTrack();
 }
 
 function loadTrack(){
-  const t = currentPlaylist[current];
-  audio.src = t.url;
+  if(!currentPlaylist) return;
+  audio.src = currentPlaylist[current].url;
 }
 
-/* PLAY */
 function togglePlay(){
+  if(!audio.src && currentPlaylist) loadTrack();
+
   if(audio.paused){
-    loadTrack();
     audio.play();
   } else {
     audio.pause();
@@ -270,26 +273,26 @@ function togglePlay(){
 }
 
 function nextTrack(){
+  if(!currentPlaylist) return;
   current = (current + 1) % currentPlaylist.length;
   loadTrack();
   audio.play();
 }
 
-/* LOOP */
 function toggleLoop(){
   loopEnabled = !loopEnabled;
 }
 
 audio.addEventListener("ended", ()=>{
-  if(loopEnabled){
+  if(loopEnabled && currentPlaylist){
     nextTrack();
   }
 });
 
-/* 🔥 HIIT TIMER */
-let hiitInterval;
-let round = 0;
-let phase = "work"; // work / rest
+/* HIIT */
+let hiit;
+let phase = "work";
+let time = 30;
 
 function beep(){
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -297,37 +300,36 @@ function beep(){
   osc.connect(ctx.destination);
   osc.frequency.value = 800;
   osc.start();
-  setTimeout(()=>osc.stop(), 150);
+  setTimeout(()=>osc.stop(),150);
 }
 
 function startHIIT(){
-  clearInterval(hiitInterval);
-  round = 30;
+  clearInterval(hiit);
   phase = "work";
+  time = 30;
 
-  hiitInterval = setInterval(()=>{
-    document.getElementById("timer").innerText = phase.toUpperCase() + " " + round;
+  hiit = setInterval(()=>{
+    document.getElementById("timer").innerText = phase.toUpperCase() + " " + time;
 
-    round--;
+    time--;
 
-    if(round < 0){
+    if(time < 0){
       beep();
 
       if(phase === "work"){
         phase = "rest";
-        round = 15;
+        time = 15;
       } else {
         phase = "work";
-        round = 30;
+        time = 30;
       }
     }
-
   },1000);
 }
 
 function stopHIIT(){
-  clearInterval(hiitInterval);
-  document.getElementById("timer").innerText = "STOPPED";
+  clearInterval(hiit);
+  document.getElementById("timer").innerText = "STOP";
 }
 
 </script>
